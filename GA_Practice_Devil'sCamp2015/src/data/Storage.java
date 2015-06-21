@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Storage {
+	private static Storage instance = new Storage();
 	private File trainFile = new File("trainData");
 	private File testFile = new File("testData");
 	private InputStream fileStream = InputStream.getInstance();
 	private Division trainSet;
 	private Division testSet;
 	
-	public Storage() {
+	private Storage() {
 		try {
 			trainSet = fileStream.setData(trainFile);
 			testSet =fileStream.setData(testFile);
@@ -25,5 +26,9 @@ public class Storage {
 	
 	public Division getTest() {
 		return testSet;
+	}
+	
+	public static Storage getStorageInstance() {
+		return instance;
 	}
 }
