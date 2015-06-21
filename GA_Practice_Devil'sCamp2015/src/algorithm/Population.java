@@ -13,11 +13,25 @@ public class Population {
 	
 	public Population(int max) {
 		this.maxGen = max;
+		generation = new ArrayList<Individual>();
 	}
 	
 	public void run() {
+		initGeneration();
+		System.out.println("Algorithm initiated");
 		for(int i=0;i<this.maxGen;i++) {
-			
+			nextGeneration();
+			System.out.println("Generation " + i);
 		}
+	}
+	
+	private void initGeneration() {
+		for(int i=0;i<maxPopulation;i++) {
+			generation.add(new Individual());
+		}
+	}
+	
+	private void nextGeneration() {
+		
 	}
 }
