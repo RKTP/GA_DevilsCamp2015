@@ -6,7 +6,7 @@ public class Population {
 	private ArrayList<Individual> generation;
 	private Individual noSelection;
 	private int maxGen=100;
-	private final int maxPopulation=60;
+	private final int maxPopulation=50;
 	private final int supremeNum=10;
 	private data.Division test = data.Storage.getStorageInstance().getTest();
 	

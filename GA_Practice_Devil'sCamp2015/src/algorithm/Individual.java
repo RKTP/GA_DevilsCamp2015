@@ -11,7 +11,7 @@ public class Individual implements Comparable<Individual> {
 	public Individual() {
 		this.gene = new ArrayList<Integer>();
 		for(int i=0;i<this.givenData.getAtt().get(0).length;i++) {
-			if(Math.random()<0.05) {
+			if(Math.random()<0.0015) {
 				this.gene.add(i);
 			}
 			while(this.gene.size()>15) {
@@ -19,6 +19,7 @@ public class Individual implements Comparable<Individual> {
 			}
 		}
 		setAcc();
+		System.out.println("Gene POP!");
 	}
 
 	//Replace this Method with your own designed one
@@ -88,7 +89,7 @@ public class Individual implements Comparable<Individual> {
 		int xor=0;
 		
 		for(int i=0;i<trainLabel.length;i++) {
-			if(trainLabel[i]==predictLabel[i]) {
+			if(trainLabel[i]!=predictLabel[i]) {
 				xor++;
 			}
 		}
@@ -131,11 +132,11 @@ public class Individual implements Comparable<Individual> {
 				}
 			}
 		}
-		
-		for(int i=0;i<knn;i++) {
+
+		for(int i=0;i<this.givenData.getLabel().get(0).length;i++) {
 			int nearestLabelSum=0;
-			for(int j=0;j<this.givenData.getLabel().get(0).length;j++) {
-				if(this.givenData.getLabel().get(nearestPattern.get(i))[j]) {
+			for(int j=0;j<knn;j++) {
+				if(this.givenData.getLabel().get(nearestPattern.get(j))[i]) {
 					nearestLabelSum++;
 				}
 			}
