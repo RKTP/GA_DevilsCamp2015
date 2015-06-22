@@ -21,7 +21,7 @@ public class Individual implements Comparable<Individual> {
 		setAcc();
 	}
 
-	//Replace the Method
+	//Replace this Method with your own designed one
 	public Individual(Individual papa, Individual mama) {
 		this.gene = new ArrayList<Integer>();
 		
@@ -78,12 +78,12 @@ public class Individual implements Comparable<Individual> {
 	}
 
 //Hamming Loss - XOR rate part
-	private double calcAcc(int instanceIndex) {
+	private double calcAcc(int patternIndex) {
 		double acc=0;
-		Boolean trainLabel[] = givenData.getLabel().get(instanceIndex);
+		Boolean trainLabel[] = givenData.getLabel().get(patternIndex);
 		Boolean predictLabel[];
 		
-		predictLabel = knnClassify(instanceIndex);
+		predictLabel = knnClassify(patternIndex);
 		
 		int xor=0;
 		
@@ -99,22 +99,50 @@ public class Individual implements Comparable<Individual> {
 	}
 	
 //3-NN classification
-	private Boolean[] knnClassify(int instanceIndex) {
+	private Boolean[] knnClassify(int patternIndex) {
 		final int knn=3;
 		Boolean prediction[] = new Boolean[this.givenData.getLabel().get(0).length];
-		int nearest[] = new int[knn];
-		double eDistance[] = new double[knn];
+		ArrayList<Integer> nearestPattern = new ArrayList<Integer>();
+		ArrayList<Double> nearestDistance = new ArrayList<Double>();
 		
 		for(int i=0;i<knn;i++) {
-			eDistance[i]=Double.MAX_VALUE;
+			nearestDistance.add(Double.MAX_VALUE);
+			nearestPattern.add(null);
 		}
 		
 		for(int i=0;i<givenData.getNum();i++) {
-			if(i==instanceIndex) {
+			if(i==patternIndex) {
 				continue;
 			}
+			double euclideanDistance=0;
 			for(int j=0;j<givenData.getAtt().get(0).length;j++) {
-				
+				double linearDistance = this.givenData.getAtt().get(i)[j] - this.givenData.getAtt().get(patternIndex)[j];
+				euclideanDistance += Math.pow(linearDistance,2);
+			}
+			euclideanDistance = Math.sqrt(euclideanDistance);
+			
+			for(int j=0;j<knn;j++) {
+				if(nearestDistance.get(j)>euclideanDistance) {
+					nearestDistance.add(j,euclideanDistance);
+					nearestDistance.remove(3);
+					
+					nearestPattern.add(j,i);
+					nearestPattern.remove(3);
+				}
+			}
+		}
+		
+		for(int i=0;i<knn;i++) {
+			int nearestLabelSum=0;
+			for(int j=0;j<this.givenData.getLabel().get(0).length;j++) {
+				if(this.givenData.getLabel().get(nearestPattern.get(i))[j]) {
+					nearestLabelSum++;
+				}
+			}
+			if(nearestLabelSum>knn/2) {
+				prediction[i]=true;
+			} else {
+				prediction[i]=false;
 			}
 		}
 		
