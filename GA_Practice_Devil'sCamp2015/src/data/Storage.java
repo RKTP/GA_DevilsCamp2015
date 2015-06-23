@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 
 public class Storage {
 	private static Storage instance = new Storage();
-	private File trainFile = new File("train_arcene.dat");
-	private File testFile = new File("valid_arcene.dat");
+	private File trainFile = new File("train.dat");
+	private File testFile = new File("test.dat");
 	private InputStream fileStream = InputStream.getInstance();
 	private Division trainSet;
 	private Division testSet;

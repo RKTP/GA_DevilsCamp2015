@@ -8,12 +8,12 @@ import java.util.StringTokenizer;
 
 public class InputStream {
 	private static InputStream instance = new InputStream();
-//	private final int attNum = 294;
-//	private final int labelNum = 5;
+	private final int attNum = 294;
+	private final int labelNum = 5;
 
-	private final int patternNum = 100;
-	private final int attNum = 10000;
-	private final int labelNum = 1;
+//	private final int patternNum = 100;
+//	private final int attNum = 10000;
+//	private final int labelNum = 1;
 	
 	private InputStream() {
 		//empty constructor
@@ -25,13 +25,13 @@ public class InputStream {
 		String temp;
 		Scanner scan = new Scanner(file);
 		StringTokenizer token;
-//		int numofData=0;
+		int numofData=0;
 		
 		ArrayList<Double[]> att = new ArrayList<Double[]>();
 		ArrayList<Boolean[]> label = new ArrayList<Boolean[]>();
 
 //If you want to try train/test.dat, uncomment this source
-/*
+
 		while(scan.hasNextLine()) {
 			temp = scan.nextLine();
 			token = new StringTokenizer(temp,",");
@@ -54,7 +54,8 @@ public class InputStream {
 			numofData++;
 		}
 		scan.close();
-*/		
+
+/*
 		for(int k=0;k<patternNum;k++) {
 			temp = scan.nextLine();
 			token = new StringTokenizer(temp," ");
@@ -83,10 +84,11 @@ public class InputStream {
 			label.add(labelArr);
 		}
 		scan.close();
+*/
 		
 		dataSet.setAtt(att);
 		dataSet.setLabel(label);
-		dataSet.setNum(this.patternNum);
+		dataSet.setNum(numofData);
 		
 		return dataSet;
 	}

@@ -2,7 +2,7 @@ package algorithm;
 
 import java.util.ArrayList;
 
-public class Individual implements Comparable<Individual> {
+public class Individual extends Thread implements Comparable<Individual> {
 	protected ArrayList<Integer> gene;
 	private double accuracy;
 	private data.Division givenData = data.Storage.getStorageInstance().getTrain();
@@ -11,18 +11,21 @@ public class Individual implements Comparable<Individual> {
 	public Individual() {
 		this.gene = new ArrayList<Integer>();
 		for(int i=0;i<this.givenData.getAtt().get(0).length;i++) {
-			if(Math.random()<0.0015) {
+			if(Math.random()<0.1) {
 				this.gene.add(i);
 			}
-			while(this.gene.size()>15) {
+			while(this.gene.size()>10) {
 				this.gene.remove((int)(Math.random()*gene.size()));
 			}
 		}
-		setAcc();
-		System.out.println("Gene POP!");
+//		setAcc();
 	}
-
-	//Replace this Method with your own designed one
+	
+	public void run() {
+		setAcc();
+	}
+//***********************************************************************************************************************//
+//Replace this Method with your own designed one
 	public Individual(Individual papa, Individual mama) {
 		this.gene = new ArrayList<Integer>();
 		
@@ -30,15 +33,21 @@ public class Individual implements Comparable<Individual> {
 		this.gene.addAll(papa.getGene());
 		this.gene.addAll(mama.getGene());
 		
-		while(this.gene.size()>15) {
+		while(this.gene.size()>10) {
 			this.gene.remove((int)(Math.random()*gene.size()));
+		}
+		
+		for(int index=0;index<this.gene.size();index++) {
+			for(int cIndex=index+1;cIndex<this.gene.size();cIndex++) {
+				if(this.gene.get(index)==this.gene.get(cIndex)) this.gene.remove(cIndex--);
+			}
 		}
 		
 		//Mutation
 		for(int i=0;i<this.gene.size();i++) {
 			double mutateFlag=Math.random();
 			int temp = this.gene.get(0);
-			if(mutateFlag<0.1) {
+			if(mutateFlag<0.15) {
 				while(this.gene.contains(temp)) {
 					temp = (int)(Math.random()*this.givenData.getAtt().get(0).length);
 				}
@@ -48,6 +57,7 @@ public class Individual implements Comparable<Individual> {
 		}
 		setAcc();
 	}
+//***********************************************************************************************************************//
 	
 	public ArrayList<Integer> getGene() {
 		return this.gene;
@@ -76,6 +86,7 @@ public class Individual implements Comparable<Individual> {
 			accuracy += calcAcc(i);
 		}
 		accuracy = accuracy/this.givenData.getNum();
+		this.accuracy = accuracy;
 	}
 
 //Hamming Loss - XOR rate part
@@ -116,8 +127,9 @@ public class Individual implements Comparable<Individual> {
 				continue;
 			}
 			double euclideanDistance=0;
-			for(int j=0;j<givenData.getAtt().get(0).length;j++) {
-				double linearDistance = this.givenData.getAtt().get(i)[j] - this.givenData.getAtt().get(patternIndex)[j];
+			for(int j=0;j<this.gene.size();j++) {
+				int attIndex = this.gene.get(j);
+				double linearDistance = this.givenData.getAtt().get(i)[attIndex] - this.givenData.getAtt().get(patternIndex)[attIndex];
 				euclideanDistance += Math.pow(linearDistance,2);
 			}
 			euclideanDistance = Math.sqrt(euclideanDistance);
